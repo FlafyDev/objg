@@ -18,6 +18,8 @@ class CountListener extends GDObject {
     return generateGDString({
       GDProps.objectCommonID: "1611",
       GDProps.objectCommonGroups: groups.join("."),
+      if (x != null) GDProps.objectCommonX: x.toString(),
+      if (y != null) GDProps.objectCommonY: y.toString(),
       GDProps.countTriggerItemID: itemID.toString(),
       GDProps.countTriggerTargetCount: targetCount.toString(),
       GDProps.countTriggerTargetID: then.getUniqueGroup().toString(),

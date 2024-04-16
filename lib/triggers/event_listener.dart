@@ -40,6 +40,8 @@ class EventListener extends GDObject {
     return generateGDString({
       GDProps.objectCommonID: "3604",
       GDProps.objectCommonGroups: groups.join("."),
+      if (x != null) GDProps.objectCommonX: x.toString(),
+      if (y != null) GDProps.objectCommonY: y.toString(),
       GDProps.eventTriggerGroupID: child.getUniqueGroup().toString(),
       GDProps.eventTriggerEvents: onEvents.map((e) => e.id).join("."),
       GDProps.eventTriggerExtraID2: players.index.toString(),

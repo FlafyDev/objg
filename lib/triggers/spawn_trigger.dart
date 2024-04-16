@@ -9,9 +9,14 @@ class SpawnTrigger extends GDObject {
 
   SpawnTrigger({
     this.onStart = false,
+    int? x,
+    int? y,
     this.delay = 0.0,
     required this.target,
-  });
+  }) {
+    this.x = x;
+    this.y = y;
+  }
 
   @override
   String toGDString() {
@@ -20,6 +25,8 @@ class SpawnTrigger extends GDObject {
     return generateGDString({
       GDProps.objectCommonID: "1268",
       GDProps.objectCommonGroups: groups.join("."),
+      if (x != null) GDProps.objectCommonX: x.toString(),
+      if (y != null) GDProps.objectCommonY: y.toString(),
       GDProps.spawnTriggerTargetID: target.getUniqueGroup().toString(),
       GDProps.spawnTriggerDelay: delay.toString(),
       if (!onStart) GDProps.triggerCommonMultiTriggered: 1.toString(),
@@ -29,4 +36,3 @@ class SpawnTrigger extends GDObject {
     // return "$str;${child.toGDString()}";
   }
 }
-

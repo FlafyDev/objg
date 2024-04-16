@@ -6,6 +6,8 @@ abstract class GDObject {
     proj.objects.add(this);
     _uniqueGroup = uniqueGroup;
   }
+  int? x;
+  int? y;
   int? _uniqueGroup;
   final List<int> groups = [
     proj.generatedGroup

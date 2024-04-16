@@ -22,6 +22,8 @@ class Stop extends GDObject {
     return generateGDString({
       GDProps.objectCommonID: "1616",
       GDProps.objectCommonGroups: groups.join("."),
+      if (x != null) GDProps.objectCommonX: x.toString(),
+      if (y != null) GDProps.objectCommonY: y.toString(),
       GDProps.stopTriggerStopType: type.index.toString(),
       GDProps.stopTriggerTargetID: target.getUniqueGroup().toString(),
       GDProps.triggerCommonMultiTriggered: 1.toString(),
@@ -29,4 +31,3 @@ class Stop extends GDObject {
     });
   }
 }
-

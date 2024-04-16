@@ -26,6 +26,8 @@ class InstantCount extends GDObject {
     return generateGDString({
       GDProps.objectCommonID: "1811",
       GDProps.objectCommonGroups: groups.join("."),
+      if (x != null) GDProps.objectCommonX: x.toString(),
+      if (y != null) GDProps.objectCommonY: y.toString(),
       GDProps.instantCountTriggerItemID: itemID.toString(),
       GDProps.instantCountTriggerTargetCount: targetCount.toString(),
       GDProps.instantCountTriggerTargetID: then.getUniqueGroup().toString(),

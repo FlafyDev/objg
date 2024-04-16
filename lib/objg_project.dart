@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:objg/gdobject.dart';
 import 'package:objg/objg.dart';
 import 'package:objg/triggers/pickup.dart';
@@ -42,6 +44,7 @@ class ObjGProject {
       obj.toGDString();
     }
 
+    stderr.writeln("objects: ${objects.length}");
     return objects
         .map((obj) {
           return obj.toGDString();
@@ -54,6 +57,5 @@ class ObjGProject {
 int getFreeGroup() => proj.getFreeGroup();
 int getFreeItem([int? defaultValue]) => proj.getFreeItem(defaultValue);
 String getLevelString() => proj.getLevelString();
-
 
 late final ObjGProject proj;

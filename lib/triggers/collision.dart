@@ -20,6 +20,8 @@ class Collision extends GDObject {
     return generateGDString({
       GDProps.objectCommonID: "1815",
       GDProps.objectCommonGroups: groups.join("."),
+      if (x != null) GDProps.objectCommonX: x.toString(),
+      if (y != null) GDProps.objectCommonY: y.toString(),
       GDProps.collisionTriggerBlockA: blockA.toString(),
       GDProps.collisionTriggerBlockB: blockB.toString(),
       GDProps.collisionTriggerTargetID: then.getUniqueGroup().toString(),

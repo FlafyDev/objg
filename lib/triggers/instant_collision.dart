@@ -22,6 +22,8 @@ class InstantCollision extends GDObject {
     return generateGDString({
       GDProps.objectCommonID: "3609",
       GDProps.objectCommonGroups: groups.join("."),
+      if (x != null) GDProps.objectCommonX: x.toString(),
+      if (y != null) GDProps.objectCommonY: y.toString(),
       GDProps.instantCollisionTriggerBlockA: blockA.toString(),
       GDProps.instantCollisionTriggerBlockB: blockB.toString(),
       GDProps.instantCollisionTrueID: (then?.getUniqueGroup() ?? 0).toString(),

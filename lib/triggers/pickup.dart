@@ -32,6 +32,8 @@ class Pickup extends GDObject {
         return generateGDString({
           GDProps.objectCommonID: "1817",
           GDProps.objectCommonGroups: groups.join("."),
+          if (x != null) GDProps.objectCommonX: x.toString(),
+          if (y != null) GDProps.objectCommonY: y.toString(),
           GDProps.pickupTriggerItemID: itemID.toString(),
           GDProps.pickupTriggerModifier: modifier.toString(),
           GDProps.pickupTriggerMultiplyDivide: type == PickupType.multiply ? 1.toString() : 0.toString(),
@@ -45,6 +47,8 @@ class Pickup extends GDObject {
         return generateGDString({
           GDProps.objectCommonID: "1817",
           GDProps.objectCommonGroups: groups.join("."),
+          if (x != null) GDProps.objectCommonX: x.toString(),
+          if (y != null) GDProps.objectCommonY: y.toString(),
           GDProps.pickupTriggerItemID: itemID.toString(),
           GDProps.pickupTriggerCount: count.toString(),
           GDProps.pickupTriggerOverride: (type == PickupType.override ? 1 : 0).toString(),
@@ -54,4 +58,3 @@ class Pickup extends GDObject {
     }
   }
 }
-
