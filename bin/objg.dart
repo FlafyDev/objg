@@ -6,7 +6,9 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:image/image.dart';
 
-import 'attack1.dart';
+import 'attacks/attacks.dart';
+import 'attacks/intro.dart';
+import 'attacks/bonegaps1.dart';
 import 'gasterblaster.dart';
 import 'health.dart';
 import 'health_numbers.dart';
@@ -39,11 +41,12 @@ void main() {
 
   proj = ObjGProject();
   proj.init();
-  swapInit();
+  initSwap();
   initHealthNumbers();
   initHealth();
-  attacksInit();
+  initHits();
   initBlasters();
+  initAttacks();
 // print(generatedGroup);
   // final test = EventListener(
   //   [
@@ -127,7 +130,8 @@ void main() {
       platformer,
       linear,
       // slamBlueHeartDown,
-      attack1(),
+      // attackIntro(then: attackBoneGaps1()),
+      attacks.first.run,
       // SpawnTrigger(delay: 1, target: ToggleGroup(group: linear.group, enable: false)),
       // Collision(
       //   blockA: cPlayer,

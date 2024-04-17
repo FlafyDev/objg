@@ -387,7 +387,7 @@ GDObject generatePlatformMovement(int cgPlayer) {
   ]);
 }
 
-void attacksInit() {
+void initHits() {
   final loop = sgroup([
     InstantCollision(
       blockA: cPlayerAttackHitbox,
@@ -424,7 +424,7 @@ void attacksInit() {
   );
 }
 
-void swapInit() {
+void initSwap() {
   final loopGroup = getFreeGroup();
 
   SpawnTrigger(

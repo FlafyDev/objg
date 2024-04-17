@@ -7,9 +7,9 @@ late final List<List<_Digit>> _numberGroups;
 late final List<List<_Digit>> _numberPurpleGroups;
 
 const _leftDigitX = 1324;
-const _leftDigitY = 240;
+const _leftDigitY = 243;
 const _rightDigitX = 1349;
-const _rightDigitY = 240;
+const _rightDigitY = 243;
 
 GDObject clearHealth(int health, bool kr) {
   health = health.clamp(0, 99);
