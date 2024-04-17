@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:objg/objg.dart';
 import 'health.dart';
 import 'objg.dart';
@@ -6,7 +8,9 @@ final gHeartLockArea = 25;
 final iHeartPlaying = getFreeItem(1); // 0 = red, 1 = blue
 final iJustSlammed = getFreeItem();
 const cgPlayerRed = 1;
+const gPlayerRedCenter = 31;
 const cgPlayerBlue = 50;
+const gPlayerBlueCenter = 32;
 const cPlayerAttackHitbox = 8;
 const cBottomArena = 2;
 const cTopArena = 3;
@@ -43,43 +47,45 @@ final slamBlueHeartDown = InstantCount(
 
 GDObject tpHeartToGroup(int group) {
   return sgroup([
-    Move(
-      target: ReferenceGroup(_gHeartTeleporter),
-      targetTo: ReferenceGroup(group),
-      seconds: 0,
+    // Move(
+    //   target: ReferenceGroup(_gHeartTeleporter),
+    //   targetTo: ReferenceGroup(group),
+    //   seconds: 0,
+    // ),
+    // SpawnTrigger(delay: 0.01, target: _tpHeart),
+    InstantCount(
+      itemID: iHeartPlaying,
+      targetCount: 1,
+      compareType: InstantCountCompareType.equal,
+      then: Move(
+        target: ReferenceGroup(cgPlayerBlue),
+        targetTo: ReferenceGroup(group),
+        targetToCenter: ReferenceGroup(gPlayerBlueCenter),
+        seconds: 0,
+      ),
     ),
-    SpawnTrigger(delay: 0.01, target: _tpHeart),
+    InstantCount(
+      itemID: iHeartPlaying,
+      targetCount: 0,
+      compareType: InstantCountCompareType.equal,
+      then: Move(
+        target: ReferenceGroup(cgPlayerRed),
+        targetTo: ReferenceGroup(group),
+        targetToCenter: ReferenceGroup(gPlayerRedCenter),
+        seconds: 0,
+      ),
+    ),
   ]);
 }
 
-final _tpHeart = sgroup([
-  InstantCount(
-    itemID: iHeartPlaying,
-    targetCount: 1,
-    compareType: InstantCountCompareType.equal,
-    then: Move(
-      target: ReferenceGroup(cgPlayerBlue),
-      targetTo: ReferenceGroup(_gHeartTeleporter),
-      seconds: 0,
-    ),
-  ),
-  InstantCount(
-    itemID: iHeartPlaying,
-    targetCount: 0,
-    compareType: InstantCountCompareType.equal,
-    then: Move(
-      target: ReferenceGroup(cgPlayerRed),
-      targetTo: ReferenceGroup(_gHeartTeleporter),
-      seconds: 0,
-    ),
-  ),
-]);
+// final _tpHeart = sgroup([
+// ]);
 
 final swapToBlue = InstantCount(
   itemID: iHeartPlaying,
   targetCount: 0,
   compareType: InstantCountCompareType.equal,
-  then: sgroup([
+  then: ogroup([
     Pickup(
       itemID: iHeartPlaying,
       type: PickupType.override,
@@ -87,16 +93,15 @@ final swapToBlue = InstantCount(
     ),
     Move(
       target: ReferenceGroup(cgPlayerBlue),
-      targetTo: ReferenceGroup(cgPlayerRed),
+      targetTo: ReferenceGroup(gPlayerRedCenter),
+      targetToCenter: ReferenceGroup(gPlayerBlueCenter),
       seconds: 0,
     ),
-    SpawnTrigger(
-      delay: 0.01,
-      target: Move(
-        target: ReferenceGroup(cgPlayerRed),
-        targetTo: ReferenceGroup(gHeartLockArea),
-        seconds: 0,
-      ),
+    Move(
+      target: ReferenceGroup(cgPlayerRed),
+      targetTo: ReferenceGroup(gHeartLockArea),
+      targetToCenter: ReferenceGroup(gPlayerRedCenter),
+      seconds: 0,
     ),
   ]),
 );
@@ -105,7 +110,7 @@ final swapToRed = InstantCount(
   itemID: iHeartPlaying,
   targetCount: 1,
   compareType: InstantCountCompareType.equal,
-  then: sgroup([
+  then: ogroup([
     Pickup(
       itemID: iHeartPlaying,
       type: PickupType.override,
@@ -113,22 +118,21 @@ final swapToRed = InstantCount(
     ),
     Move(
       target: ReferenceGroup(cgPlayerRed),
-      targetTo: ReferenceGroup(cgPlayerBlue),
+      targetTo: ReferenceGroup(gPlayerBlueCenter),
+      targetToCenter: ReferenceGroup(gPlayerRedCenter),
       seconds: 0,
     ),
-    SpawnTrigger(
-      delay: 0.01,
-      target: Move(
-        target: ReferenceGroup(cgPlayerBlue),
-        targetTo: ReferenceGroup(gHeartLockArea),
-        seconds: 0,
-      ),
-    )
+    Move(
+      target: ReferenceGroup(cgPlayerBlue),
+      targetTo: ReferenceGroup(gHeartLockArea),
+      targetToCenter: ReferenceGroup(gPlayerBlueCenter),
+      seconds: 0,
+    ),
   ]),
 );
 
 GDObject generateLinearMovement(Direction direction, int cgPlayer) {
-  const speed = 200; // [Whatever unit Move uses per second]
+  const speed = 230; // [Whatever unit Move uses per second]
   const cArena = {
     Direction.left: cLeftArena,
     Direction.right: cRightArena,
@@ -192,7 +196,7 @@ GDObject generateLinearMovement(Direction direction, int cgPlayer) {
 }
 
 GDObject generatePlatformMovement(int cgPlayer) {
-  const speed = 200; // [Whatever unit Move uses per second]
+  const speed = 230; // [Whatever unit Move uses per second]
   // final y = direction == Direction.up
   //     ? 100
   //     : direction == Direction.down
@@ -303,12 +307,12 @@ GDObject generatePlatformMovement(int cgPlayer) {
           blockB: cBottomArena,
           then: sgroup([
             Move(
-              y: (0.3 * speed * 1.5).round(),
-              seconds: 0.3,
+              y: (0.4 * speed * 1.2).round(),
+              seconds: 0.4,
               target: ReferenceGroup(cgPlayer),
             )..groups.add(upMoveGroup),
             SpawnTrigger(
-              delay: 0.3,
+              delay: 0.4,
               target: InstantCount(
                 itemID: iJustJumped,
                 targetCount: 1,
@@ -393,6 +397,31 @@ void attacksInit() {
   ]);
   SpawnTrigger(delay: 1.0 / 30, target: loop).groups.add(loop.group);
   SpawnTrigger(onStart: true, target: loop);
+
+  createPixelSpriteFromFile(
+    File("/home/flafy/undertalestuff/blueheart.png"),
+    groups: [
+      cgPlayerBlue
+    ],
+    centerGroups: [],
+    x: 3670.27.toDouble(),
+    y: 360.665.toDouble(),
+    scaleX: 1,
+    scaleY: 1,
+    zLayer: 9, // T3
+  );
+  createPixelSpriteFromFile(
+    File("/home/flafy/undertalestuff/redheart.png"),
+    groups: [
+      cgPlayerRed
+    ],
+    centerGroups: [],
+    x: 3711.63.toDouble(),
+    y: 383.502.toDouble(),
+    scaleX: 1,
+    scaleY: 1,
+    zLayer: 9, // T3
+  );
 }
 
 void swapInit() {
@@ -411,6 +440,7 @@ void swapInit() {
             then: Move(
               target: ReferenceGroup(cgPlayerRed),
               targetTo: ReferenceGroup(gHeartLockArea),
+              targetToCenter: ReferenceGroup(gPlayerRedCenter),
               seconds: 0,
             ),
           ),

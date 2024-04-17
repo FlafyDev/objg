@@ -3,13 +3,14 @@ import 'dart:math';
 import 'package:objg/objg.dart';
 
 import 'heart_control.dart';
+import 'objg.dart';
 
-class BlasterRestoreRef {
+class _BlasterRestoreRef {
   final int lastX;
   final int lastY;
   final double lastDegrees;
 
-  const BlasterRestoreRef({
+  const _BlasterRestoreRef({
     required this.lastX,
     required this.lastY,
     required this.lastDegrees,
@@ -42,7 +43,7 @@ class Blaster {
   }) : assert(gAnimations.length == 6) {
     SpawnTrigger(
       onStart: true,
-      target: clear(),
+      target: _clear(),
     );
   }
 
@@ -171,10 +172,7 @@ class Blaster {
     );
   }
 
-  (
-    GDObject,
-    GDObject Function(),
-  ) shoot({
+  RunAndClear shoot({
     required int startX,
     required int startY,
     required int targetX,
@@ -183,12 +181,12 @@ class Blaster {
   }) {
     final shootMoveX = (1000 * cos((90 - targetRotation) / 360 * 2 * pi)).toInt();
     final shootMoveY = (1000 * sin((90 - targetRotation) / 360 * 2 * pi)).toInt();
-    final restoreRef = BlasterRestoreRef(
+    final restoreRef = _BlasterRestoreRef(
       lastX: (targetX + shootMoveX) - initialX,
       lastY: (targetY + shootMoveY) - initialY,
       lastDegrees: targetRotation,
     );
-    return (
+    return RunAndClear(
       ogroup([
         ToggleGroup(group: gAnimations[0], enable: true),
         Move(
@@ -232,7 +230,7 @@ class Blaster {
           ]),
         ),
       ]),
-      () => clear(restoreRef),
+      _clear(restoreRef),
     );
   }
 
@@ -302,7 +300,7 @@ class Blaster {
       Pickup(
         itemID: iAnimCounter,
         type: PickupType.override,
-        count: 20,
+        count: 10,
       ),
       ToggleGroup(group: gAnimations[0], enable: false),
       ToggleGroup(group: gAnimations[1], enable: true),
@@ -351,7 +349,7 @@ class Blaster {
 
   // Must be called before reshooting the blaster again.
   // Must be called after the blaster has finished shooting(let's say 3 seconds).
-  GDObject clear([BlasterRestoreRef? restoreRef]) {
+  GDObject _clear([_BlasterRestoreRef? restoreRef]) {
     return sgroup([
       _toggleOffAnimations,
       ToggleGroup(group: gLaserHitbox, enable: false),

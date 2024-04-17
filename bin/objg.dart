@@ -9,10 +9,18 @@ import 'package:image/image.dart';
 import 'attack1.dart';
 import 'gasterblaster.dart';
 import 'health.dart';
+import 'health_numbers.dart';
 import 'heart_control.dart';
 
 // void main() {
 // }
+
+class RunAndClear {
+  final GDObject run;
+  final GDObject clear;
+
+  const RunAndClear(this.run, this.clear);
+}
 
 void main() {
   // final File input = File('/home/flafy/Documents/bones.png');
@@ -32,6 +40,7 @@ void main() {
   proj = ObjGProject();
   proj.init();
   swapInit();
+  initHealthNumbers();
   initHealth();
   attacksInit();
   initBlasters();
@@ -62,14 +71,19 @@ void main() {
     generatePlatformMovement(cgPlayerBlue),
   ]);
 
+  SpawnTrigger(
+    onStart: true,
+    target: AlphaTrigger(target: ReferenceGroup(gSpriteCenter), opacity: 0, seconds: 0),
+  );
+
   createPixelSpriteFromFile(
-    File("/home/flafy/undertalestuff/gaster1.png"),
+    File("/home/flafy/undertalestuff/kr.png"),
     groups: [ ],
     centerGroups: [ ],
     x: 500.toDouble(),
-    y: 0.toDouble(),
-    scaleX: 3,
-    scaleY: 3,
+    y: 100.toDouble(),
+    scaleX: 1,
+    scaleY: 1,
     zLayer: 9, // T3
   );
 
@@ -140,7 +154,8 @@ void main() {
   //       // generateDirection(Direction.right),
   //     ]));
 
-  print(proj.getLevelString());
+  final level = proj.getLevelString();
+  File("/home/flafy/undertalestuff/level.txt").writeAsStringSync(level);
 
   // final objs = Group([
   //   EventListener(
@@ -163,4 +178,3 @@ void main() {
 // const gPlayer = 10;
 
 // final test = SGroup(children: []);
-

@@ -6,6 +6,7 @@ class Move extends GDObject {
   final int? moveX;
   final int? moveY;
   final GDObject? targetTo;
+  final GDObject? targetToCenter;
   final double seconds;
   final GDObject target;
   final TriggerEasing easing;
@@ -15,6 +16,7 @@ class Move extends GDObject {
     int? x,
     int? y,
     this.targetTo,
+    this.targetToCenter,
     this.easing = TriggerEasing.none,
     required this.seconds,
     required this.target,
@@ -35,6 +37,7 @@ class Move extends GDObject {
       if (moveX != null) GDProps.moveTriggerMoveX: moveX.toString(),
       if (moveY != null) GDProps.moveTriggerMoveY: moveY.toString(),
       if (targetTo != null) GDProps.moveTriggerTargetToID: targetTo!.getUniqueGroup().toString(),
+      if (targetToCenter != null) GDProps.moveTriggerTargetToCenterID: targetToCenter!.getUniqueGroup().toString(),
       if (targetTo != null) GDProps.moveTriggerTargetMode: 1.toString(),
       GDProps.triggerCommonEasing: easing.id.toString(),
       GDProps.moveTriggerTimeSeconds: seconds.toString(),

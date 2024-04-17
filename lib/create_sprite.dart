@@ -6,6 +6,7 @@ import 'package:crypto/crypto.dart';
 import 'package:image/image.dart';
 import 'package:objg/gdobject.dart';
 import 'package:objg/hsv_to_gdhsv.dart';
+import 'package:objg/objg_project.dart';
 import 'package:objg/triggers/custom.dart';
 
 import 'gdprops.dart';
@@ -201,6 +202,8 @@ void _cacheRectangles(String id, List<_RectangleWithColor> rectangles) {
   file.writeAsStringSync(json.encode(rectangles.map((e) => e.toJson()).toList()));
 }
 
+final gSpriteCenter = getFreeGroup();
+
 List<GDObject> createPixelSpriteFromFile(
   File file, {
   required List<int> groups,
@@ -252,6 +255,7 @@ List<GDObject> createPixelSpriteFromFile(
     [
       ...groups,
       ...centerGroups,
+      gSpriteCenter,
     ],
     scaleX,
     scaleY,

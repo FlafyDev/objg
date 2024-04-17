@@ -29,6 +29,7 @@ class SpawnTrigger extends GDObject {
       if (y != null) GDProps.objectCommonY: y.toString(),
       GDProps.spawnTriggerTargetID: target.getUniqueGroup().toString(),
       GDProps.spawnTriggerDelay: delay.toString(),
+      GDProps.spawnTriggerPreviewDisable: 1.toString(),
       if (!onStart) GDProps.triggerCommonMultiTriggered: 1.toString(),
       if (!onStart) GDProps.triggerCommonSpawnTriggered: 1.toString(),
     });

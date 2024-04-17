@@ -1,15 +1,40 @@
 import 'package:objg/objg.dart';
 
+import 'health_numbers.dart';
+
 // index 0 = 1 hp
 final healthBarGroupList = <int>[];
 final karmaBarGroupList = <int>[];
 final gKarmaBars = getFreeGroup();
-final iHealth = getFreeItem(82);
-final iKarma = getFreeItem(5);
+final iHealth = getFreeItem(92);
+final iKarma = getFreeItem(1);
 final gCurrentHealthBar = getFreeGroup();
+final gPurpleMaxHPText = 18;
 
 final GDObject _showHealthBar = (() {
   final objs = <GDObject>[];
+  objs.addAll([
+    InstantCount(
+      itemID: iKarma,
+      targetCount: 0,
+      compareType: InstantCountCompareType.equal,
+      then: AlphaTrigger(
+        target: ReferenceGroup(gPurpleMaxHPText),
+        opacity: 0,
+        seconds: 0,
+      ),
+    ),
+    InstantCount(
+      itemID: iKarma,
+      targetCount: 0,
+      compareType: InstantCountCompareType.larger,
+      then: AlphaTrigger(
+        target: ReferenceGroup(gPurpleMaxHPText),
+        opacity: 1,
+        seconds: 0,
+      ),
+    ),
+  ]);
   for (int i = 0; i < healthBarGroupList.length; i++) {
     final percent = (i + 1) / 92;
     const fullScaleX = 6.159;
@@ -20,6 +45,18 @@ final GDObject _showHealthBar = (() {
         targetCount: i + 1,
         compareType: InstantCountCompareType.equal,
         then: sgroup([
+          InstantCount(
+            itemID: iKarma,
+            targetCount: 0,
+            compareType: InstantCountCompareType.equal,
+            then: setHealth(i + 1, false),
+          ),
+          InstantCount(
+            itemID: iKarma,
+            targetCount: 0,
+            compareType: InstantCountCompareType.larger,
+            then: setHealth(i + 1, true),
+          ),
           Move(
             x: 0,
             y: -1000,
@@ -76,6 +113,18 @@ final GDObject _hideHealthBar = (() {
         targetCount: i + 1,
         compareType: InstantCountCompareType.equal,
         then: sgroup([
+          InstantCount(
+            itemID: iKarma,
+            targetCount: 0,
+            compareType: InstantCountCompareType.equal,
+            then: clearHealth(i + 1, false),
+          ),
+          InstantCount(
+            itemID: iKarma,
+            targetCount: 0,
+            compareType: InstantCountCompareType.larger,
+            then: clearHealth(i + 1, true),
+          ),
           Move(
             x: 0,
             y: 1000,

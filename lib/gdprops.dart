@@ -40,6 +40,7 @@ enum GDProps {
   moveTriggerTimeSeconds(10),
   moveTriggerTargetMode(100),
   moveTriggerTargetToID(71),
+  moveTriggerTargetToCenterID(395),
 
   stopTriggerTargetID(51),
   stopTriggerUseControlID(535),
@@ -58,6 +59,7 @@ enum GDProps {
 
   spawnTriggerTargetID(51),
   spawnTriggerDelay(63),
+  spawnTriggerPreviewDisable(102),
 
   pickupTriggerItemID(80),
   pickupTriggerCount(77),

@@ -1,5 +1,6 @@
 import 'package:objg/objg.dart';
 
+import 'arena.dart';
 import 'gasterblaster.dart';
 import 'heart_control.dart';
 
@@ -155,9 +156,12 @@ GDObject attack1() {
   //   target: shoot4.$1,
   // );
 
+  final arenaMove = moveArenaAndClear(115 * 3, 13 * 3, false, true);
+
   return sgroup([
+    arenaMove.run,
     tpHeartToGroup(gArenaCenter),
-    swapToRed,
+    SpawnTrigger(delay: 0.01, target: swapToRed),
     SpawnTrigger(
       delay: 8.0 / 30,
       target: sgroup([
@@ -214,46 +218,49 @@ GDObject attack1() {
                 SpawnTrigger(
                   delay: 60.0 / 30,
                   target: sgroup([
-                    shoot1.$1,
-                    shoot2.$1,
-                    shoot3.$1,
-                    shoot4.$1,
+                    shoot1.run,
+                    shoot2.run,
+                    shoot3.run,
+                    shoot4.run,
                     SpawnTrigger(
                       delay: 25.0 / 30,
                       target: sgroup([
-                        shoot5.$1,
-                        shoot6.$1,
-                        shoot7.$1,
-                        shoot8.$1,
+                        shoot5.run,
+                        shoot6.run,
+                        shoot7.run,
+                        shoot8.run,
                         SpawnTrigger(
                           delay: 25.0 / 30,
                           target: ogroup([
-                            shoot1.$2(),
-                            shoot2.$2(),
-                            shoot3.$2(),
-                            shoot4.$2(),
-                            shoot1.$1,
-                            shoot2.$1,
-                            shoot3.$1,
-                            shoot4.$1,
+                            shoot1.clear,
+                            shoot2.clear,
+                            shoot3.clear,
+                            shoot4.clear,
+                            shoot1.run,
+                            shoot2.run,
+                            shoot3.run,
+                            shoot4.run,
                             SpawnTrigger(
                               delay: 25.0 / 30,
                               target: sgroup([
-                                shoot5.$2(),
-                                shoot6.$2(),
-                                shoot7.$2(),
-                                shoot8.$2(),
-                                shoot9.$1,
-                                shoot10.$1,
+                                shoot5.clear,
+                                shoot6.clear,
+                                shoot7.clear,
+                                shoot8.clear,
+                                shoot9.run,
+                                shoot10.run,
                                 SpawnTrigger(
                                   delay: 97.0 / 30,
                                   target: sgroup([
-                                    shoot9.$2(),
-                                    shoot10.$2(),
-                                    shoot1.$2(),
-                                    shoot2.$2(),
-                                    shoot3.$2(),
-                                    shoot4.$2(),
+                                    shoot9.clear,
+                                    shoot10.clear,
+                                    shoot1.clear,
+                                    shoot2.clear,
+                                    shoot3.clear,
+                                    shoot4.clear,
+                                    arenaMove.clear,
+                                    ToggleGroup(group: gBonesUp, enable: false),
+                                    ToggleGroup(group: gBonesSide, enable: false),
                                   ]),
                                 ),
                               ]),
