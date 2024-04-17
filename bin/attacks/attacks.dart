@@ -1,5 +1,6 @@
 import 'package:objg/objg.dart';
 
+import 'bluebones.dart';
 import 'bonegaps1.dart';
 import 'intro.dart';
 
@@ -7,8 +8,9 @@ late final List<Attack> attacks;
 
 void initAttacks() {
   attacks = [
-    AttackIntro(),
-    AttackBoneGaps1(),
+    // AttackIntro(),
+    // AttackBoneGaps1(),
+    AttackBlueBones(),
   ];
   for (int i = 0; i < attacks.length - 1; i++) {
     attacks[i].setThen(attacks[i + 1].run);

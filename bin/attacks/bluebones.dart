@@ -4,11 +4,11 @@ import '../arena.dart';
 import '../heart_control.dart';
 import 'attacks.dart';
 
-class AttackBoneGaps1 extends Attack {
-  AttackBoneGaps1() : super() {
-    final gBones = 33;
-    final gBonesLeft = 35;
-    final gBonesRight = 34;
+class AttackBlueBones extends Attack {
+  AttackBlueBones() : super() {
+    final gBones = 38;
+    final gBonesLeft = 39;
+    final gBonesRight = 40;
 
     _init = sgroup([
       ToggleGroup(group: gBones, enable: false),
@@ -28,27 +28,32 @@ class AttackBoneGaps1 extends Attack {
         target: sgroup([
           Move(
             x: 0,
-            y: -1500,
+            y: -1950,
             seconds: 0,
             target: ReferenceGroup(gBones),
           ),
           Move(
-            x: (600 * bones).round(),
+            x: (-635 * bones).round(),
             y: 0,
-            seconds: 61.0 / 30 * bones,
-            target: ReferenceGroup(gBonesLeft),
-          ),
-          Move(
-            x: (-600 * bones).round(),
-            y: 0,
-            seconds: 61.0 / 30 * bones,
+            seconds: 38.0 / 30 * bones,
             target: ReferenceGroup(gBonesRight),
           ),
           SpawnTrigger(
-            delay: 61.0 / 30 * bones,
+            delay: 79.0 / 30,
             target: sgroup([
-              ToggleGroup(group: gBones, enable: false),
-              arenaMove.clear,
+              Move(
+                x: (635 * bones).round(),
+                y: 0,
+                seconds: 38.0 / 30 * bones,
+                target: ReferenceGroup(gBonesLeft),
+              ),
+              SpawnTrigger(
+                delay: 106.0 / 30,
+                target: sgroup([
+                  ToggleGroup(group: gBones, enable: false),
+                  arenaMove.clear,
+                ]),
+              ),
             ]),
           ),
         ]),

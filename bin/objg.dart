@@ -41,12 +41,13 @@ void main() {
 
   proj = ObjGProject();
   proj.init();
+  print(hsvToGDHSV(201.9 / 360, 92.5 / 100, 100.0 / 100));
   initSwap();
   initHealthNumbers();
   initHealth();
-  initHits();
   initBlasters();
   initAttacks();
+  initHits();
 // print(generatedGroup);
   // final test = EventListener(
   //   [
@@ -81,8 +82,8 @@ void main() {
 
   createPixelSpriteFromFile(
     File("/home/flafy/undertalestuff/kr.png"),
-    groups: [ ],
-    centerGroups: [ ],
+    groups: [],
+    centerGroups: [],
     x: 500.toDouble(),
     y: 100.toDouble(),
     scaleX: 1,

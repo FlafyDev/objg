@@ -13,6 +13,9 @@ class ObjGProject {
   late int _lastItem = itemOffset;
   late final int itemsGroup = getFreeGroup();
 
+  final int collisionOffset = 1000;
+  late int _lastCollision = collisionOffset;
+
   final List<GDObject> objects = [];
 
   ObjGProject();
@@ -25,6 +28,10 @@ class ObjGProject {
 
   int getFreeGroup() {
     return _lastGroup++;
+  }
+
+  int getFreeCollision() {
+    return _lastCollision++;
   }
 
   int getFreeItem([int? defaultValue]) {
@@ -55,6 +62,7 @@ class ObjGProject {
 }
 
 int getFreeGroup() => proj.getFreeGroup();
+int getFreeCollision() => proj.getFreeCollision();
 int getFreeItem([int? defaultValue]) => proj.getFreeItem(defaultValue);
 String getLevelString() => proj.getLevelString();
 

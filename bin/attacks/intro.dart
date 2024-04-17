@@ -5,15 +5,15 @@ import '../gasterblaster.dart';
 import '../heart_control.dart';
 import 'attacks.dart';
 
-final _gBonesUp = 22;
-final _gBonesWarn = 23;
-final _gBonesSide = 24;
-
 class AttackIntro extends Attack {
   AttackIntro() : super() {
+    final gBonesUp = 22;
+    final gBonesWarn = 23;
+    final gBonesSide = 24;
+
     _init = sgroup([
-      ToggleGroup(group: _gBonesUp, enable: false),
-      ToggleGroup(group: _gBonesSide, enable: false),
+      ToggleGroup(group: gBonesUp, enable: false),
+      ToggleGroup(group: gBonesSide, enable: false),
     ]);
 
     final bonesUpMoveX = 8 * 5 * 30;
@@ -107,69 +107,13 @@ class AttackIntro extends Attack {
       targetRotation: 90,
     );
 
-    // final shoot9 = regularBlasters[0].shoot(
-    //   startX: 1694,
-    //   startY: 114,
-    //   targetX: 1388,
-    //   targetY: 307,
-    //   targetRotation: 90,
-    // );
-    //
-    // final shoot10 = regularBlasters[1].shoot(
-    //   startX: 1694,
-    //   startY: 114,
-    //   targetX: 1261,
-    //   targetY: 174,
-    //   targetRotation: 180,
-    // );
-    //
-    // final shoot11 = regularBlasters[2].shoot(
-    //   startX: 634,
-    //   startY: 913,
-    //   targetX: 1065,
-    //   targetY: 638,
-    //   targetRotation: 0,
-    // );
-    //
-    // final shoot12 = regularBlasters[3].shoot(
-    //   startX: 634,
-    //   startY: 913,
-    //   targetX: 950,
-    //   targetY: 511,
-    //   targetRotation: -90,
-    // );
-
-    // SpawnTrigger(
-    //   onStart: true,
-    //   delay: 1,
-    //   target: shoot1.$1,
-    // );
-    //
-    // SpawnTrigger(
-    //   onStart: true,
-    //   delay: 1,
-    //   target: shoot2.$1,
-    // );
-    //
-    // SpawnTrigger(
-    //   onStart: true,
-    //   delay: 1,
-    //   target: shoot3.$1,
-    // );
-    //
-    // SpawnTrigger(
-    //   onStart: true,
-    //   delay: 1,
-    //   target: shoot4.$1,
-    // );
-
     final arenaMove = moveArenaAndClear(115 * 3, 13 * 3, anim: false, animClear: true, then: ReferenceGroup(thenGroup));
 
     _run = sgroup([
       arenaMove.run,
       tpHeartToGroup(gArenaCenter),
-      ToggleGroup(group: _gBonesUp, enable: true),
-      ToggleGroup(group: _gBonesSide, enable: true),
+      ToggleGroup(group: gBonesUp, enable: true),
+      ToggleGroup(group: gBonesSide, enable: true),
       SpawnTrigger(delay: 0.01, target: swapToRed),
       SpawnTrigger(
         delay: 8.0 / 30,
@@ -180,13 +124,13 @@ class AttackIntro extends Attack {
             delay: 15.0 / 30,
             target: sgroup([
               Move(
-                target: ReferenceGroup(_gBonesUp),
+                target: ReferenceGroup(gBonesUp),
                 x: bonesUpMoveX.toInt(),
                 y: 0,
                 seconds: 0,
               ),
               Move(
-                target: ReferenceGroup(_gBonesWarn),
+                target: ReferenceGroup(gBonesWarn),
                 x: bonesUpMoveX.toInt(),
                 y: 0,
                 seconds: 0,
@@ -194,9 +138,9 @@ class AttackIntro extends Attack {
               SpawnTrigger(
                 delay: 0.166,
                 target: sgroup([
-                  ToggleGroup(group: _gBonesWarn, enable: false),
+                  ToggleGroup(group: gBonesWarn, enable: false),
                   Move(
-                    target: ReferenceGroup(_gBonesUp),
+                    target: ReferenceGroup(gBonesUp),
                     x: 0,
                     y: bonesUpMoveY.toInt(),
                     seconds: 0.133,
@@ -211,13 +155,13 @@ class AttackIntro extends Attack {
                     delay: 29.0 / 30,
                     target: sgroup([
                       Move(
-                        target: ReferenceGroup(_gBonesSide),
+                        target: ReferenceGroup(gBonesSide),
                         x: bonesSideMoveX.toInt(),
                         y: 0,
                         seconds: 0,
                       ),
                       Move(
-                        target: ReferenceGroup(_gBonesSide),
+                        target: ReferenceGroup(gBonesSide),
                         x: 35 * 30,
                         y: 0,
                         seconds: 1.76,
@@ -268,8 +212,8 @@ class AttackIntro extends Attack {
                                       shoot3.clear,
                                       shoot4.clear,
                                       arenaMove.clear,
-                                      ToggleGroup(group: _gBonesUp, enable: false),
-                                      ToggleGroup(group: _gBonesSide, enable: false),
+                                      ToggleGroup(group: gBonesUp, enable: false),
+                                      ToggleGroup(group: gBonesSide, enable: false),
                                     ]),
                                   ),
                                 ]),
@@ -283,7 +227,7 @@ class AttackIntro extends Attack {
                   SpawnTrigger(
                     delay: 40.0 / 30,
                     target: Move(
-                      target: ReferenceGroup(_gBonesUp),
+                      target: ReferenceGroup(gBonesUp),
                       x: 0,
                       y: -bonesUpMoveY.toInt(),
                       seconds: 0.133,

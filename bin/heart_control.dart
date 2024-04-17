@@ -24,6 +24,11 @@ const gShake = 27;
 
 const _gHeartTeleporter = 29;
 
+// Only for blue!!
+final iMoving = 99;
+final _iMovingLeft = getFreeItem();
+final _iMovingRight = getFreeItem();
+
 enum Direction {
   left,
   right,
@@ -155,10 +160,24 @@ GDObject generateLinearMovement(Direction direction, int cgPlayer) {
     seconds: 100.00,
     target: ReferenceGroup(cgPlayer),
   );
-  final stop = Stop(
-    type: StopType.stop,
-    target: move,
-  );
+  final stop = sgroup([
+    Stop(
+      type: StopType.stop,
+      target: move,
+    ),
+    if (direction == Direction.right)
+      Pickup(
+        type: PickupType.override,
+        itemID: _iMovingRight,
+        count: 0,
+      ),
+    if (direction == Direction.left)
+      Pickup(
+        type: PickupType.override,
+        itemID: _iMovingLeft,
+        count: 0,
+      ),
+  ]);
 
   return sgroup([
     EventListener(
@@ -169,11 +188,25 @@ GDObject generateLinearMovement(Direction direction, int cgPlayer) {
         if (direction == Direction.right) Events.rightPush,
       ],
       players: direction == Direction.down ? EventPlayers.p2 : EventPlayers.p1,
-      child: InstantCollision(
-        blockA: cgPlayer,
-        blockB: cArena[direction]!,
-        elsee: move,
-      ),
+      child: sgroup([
+        InstantCollision(
+          blockA: cgPlayer,
+          blockB: cArena[direction]!,
+          elsee: move,
+        ),
+        if (direction == Direction.right)
+          Pickup(
+            type: PickupType.override,
+            itemID: _iMovingRight,
+            count: 1,
+          ),
+        if (direction == Direction.left)
+          Pickup(
+            type: PickupType.override,
+            itemID: _iMovingLeft,
+            count: 1,
+          ),
+      ]),
     ),
     Collision(
       blockA: cgPlayer,
@@ -195,6 +228,9 @@ GDObject generateLinearMovement(Direction direction, int cgPlayer) {
   ]);
 }
 
+// Shared for now...
+final iOnGround = getFreeItem();
+
 GDObject generatePlatformMovement(int cgPlayer) {
   const speed = 230; // [Whatever unit Move uses per second]
   // final y = direction == Direction.up
@@ -214,7 +250,6 @@ GDObject generatePlatformMovement(int cgPlayer) {
   // );
   final upMoveGroup = getFreeGroup();
   final iJustJumped = getFreeItem();
-  final iOnGround = getFreeItem();
   final iJumpCurve = getFreeItem();
 
   final release = sgroup([
@@ -387,16 +422,62 @@ GDObject generatePlatformMovement(int cgPlayer) {
   ]);
 }
 
+var cRegularHits = [
+  7,
+  10,
+];
+final cBlueHits = [
+  9,
+];
+
+final iToDamage = getFreeItem();
+
 void initHits() {
+  // assert((cRegularHits.length + cBlueHits.length) * 0.005 + 0.005 < 1.0 / 30, "Too many hits for the time");
   final loop = sgroup([
-    InstantCollision(
-      blockA: cPlayerAttackHitbox,
-      blockB: 7,
-      then: lowerHealth1Karma,
+    for (int i = 0; i < cRegularHits.length; i++)
+      InstantCollision(
+        blockA: cPlayerAttackHitbox,
+        blockB: cRegularHits[i],
+        then: SpawnTrigger(
+          delay: 0.005 * i + 0.005,
+          target: lowerHealth1Karma,
+        ),
+      ),
+    InstantCount(
+      itemID: iMoving,
+      targetCount: 1,
+      compareType: InstantCountCompareType.equal,
+      then: sgroup([
+        for (int j = 0; j < cBlueHits.length; j++)
+          InstantCollision(
+            blockA: cPlayerAttackHitbox,
+            blockB: cBlueHits[j],
+            then: SpawnTrigger(
+              delay: 0.005 * (cRegularHits.length + j) + 0.005,
+              target: lowerHealth1Karma,
+            ),
+          ),
+      ]),
     ),
   ]);
   SpawnTrigger(delay: 1.0 / 30, target: loop).groups.add(loop.group);
   SpawnTrigger(onStart: true, target: loop);
+
+  SpawnTrigger(
+    onStart: true,
+    target: sgroup([
+      for (int j = 0; j < cBlueHits.length; j++)
+        Collision(
+          blockA: cPlayerAttackHitbox,
+          blockB: cBlueHits[j],
+          then: SpawnTrigger(
+            delay: 0.005 * (cRegularHits.length + j) + 0.005,
+            target: lowerHealth1Karma,
+          ),
+        ),
+    ]),
+  );
 
   createPixelSpriteFromFile(
     File("/home/flafy/undertalestuff/blueheart.png"),
@@ -432,7 +513,32 @@ void initSwap() {
     target: sgroup([
       SpawnTrigger(
         delay: 0.1,
-        target: sgroup([
+        target: ogroup([
+          Pickup(
+            itemID: iMoving,
+            type: PickupType.override,
+            count: 1,
+          ),
+          InstantCount(
+            itemID: _iMovingLeft,
+            targetCount: 0,
+            compareType: InstantCountCompareType.equal,
+            then: InstantCount(
+              itemID: _iMovingRight,
+              targetCount: 0,
+              compareType: InstantCountCompareType.equal,
+              then: InstantCount(
+                itemID: iOnGround,
+                targetCount: 1,
+                compareType: InstantCountCompareType.equal,
+                then: Pickup(
+                  itemID: iMoving,
+                  type: PickupType.override,
+                  count: 0,
+                ),
+              ),
+            ),
+          ),
           InstantCount(
             itemID: iHeartPlaying,
             targetCount: 1,
@@ -456,6 +562,3 @@ void initSwap() {
 // GDObject _swapHearts() {
 //   return sgroup([
 //     
-//
-//   ]);
-// }

@@ -60,6 +60,9 @@ class Blaster {
     const laserSegments = 40;
     const laserSize = 2000;
 
+    final collisionID = getFreeCollision();
+    cRegularHits.add(collisionID);
+
     final initialX = 5000 + _initialXProgress;
     final initialY = 1000;
 
@@ -135,7 +138,7 @@ class Blaster {
             GDProps.objectCommonScaleX: (laserScaleX * 0.8).toString(),
             GDProps.objectCommonScaleY: laserScaleY.toString(),
             GDProps.objectCommonZLayer: 9.toString(), // T3
-            GDProps.collisionBlockBlockID: 7.toString(),
+            GDProps.collisionBlockBlockID: collisionID.toString(),
           },
         );
       }

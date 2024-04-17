@@ -219,11 +219,11 @@ final limitKarma = (() {
 
 GDObject _lowerHealthXKarma(int karma) => ogroup([
       _hideHealthBar,
-      Pickup(
-        itemID: iHealth,
-        type: PickupType.addition,
-        count: -1,
-      ),
+      // Pickup(
+      //   itemID: iHealth,
+      //   type: PickupType.addition,
+      //   count: -1,
+      // ),
       Pickup(
         itemID: iKarma,
         type: PickupType.addition,
