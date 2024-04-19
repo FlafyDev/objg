@@ -25,7 +25,7 @@ const gShake = 27;
 const _gHeartTeleporter = 29;
 
 // Only for blue!!
-final iMoving = 99;
+final iMoving = getFreeItem();
 final _iMovingLeft = getFreeItem();
 final _iMovingRight = getFreeItem();
 
@@ -213,7 +213,14 @@ GDObject generateLinearMovement(Direction direction, int cgPlayer) {
       blockB: cArena[direction]!,
       // activate: true, <--- must
       triggerOnExit: false,
-      then: stop,
+      then: sgroup([
+        if (cgPlayer == cgPlayerBlue)
+          Stop(
+            type: StopType.stop,
+            target: ReferenceGroup(iMovingPlatformMove),
+          ),
+        stop
+      ]),
     ),
     EventListener(
       [
@@ -230,6 +237,7 @@ GDObject generateLinearMovement(Direction direction, int cgPlayer) {
 
 // Shared for now...
 final iOnGround = getFreeItem();
+final iMovingPlatformMove = getFreeGroup();
 
 GDObject generatePlatformMovement(int cgPlayer) {
   const speed = 230; // [Whatever unit Move uses per second]
@@ -297,6 +305,28 @@ GDObject generatePlatformMovement(int cgPlayer) {
   ]);
 
   return sgroup([
+    CountListener(
+      itemID: iOnGround,
+      targetCount: 0,
+      then: Stop(
+        type: StopType.stop,
+        target: ReferenceGroup(iMovingPlatformMove),
+      ),
+    ),
+    // Collision(
+    //   blockA: cgPlayer,
+    //   blockB: 11,
+    //   then: InstantCount(
+    //     itemID: iOnGround,
+    //     targetCount: 0,
+    //     compareType: InstantCountCompareType.equal,
+    //     then: Move(
+    //       x: 2000,
+    //       seconds: 100,
+    //       target: ReferenceGroup(cgPlayer),
+    //     ),
+    //   ),
+    // ),
     Collision(
       blockA: cgPlayer,
       blockB: cBottomArena,
@@ -430,54 +460,68 @@ final cBlueHits = [
   9,
 ];
 
-final iToDamage = getFreeItem();
-
 void initHits() {
   // assert((cRegularHits.length + cBlueHits.length) * 0.005 + 0.005 < 1.0 / 30, "Too many hits for the time");
   final loop = sgroup([
-    for (int i = 0; i < cRegularHits.length; i++)
+    for (final c in cRegularHits)
       InstantCollision(
         blockA: cPlayerAttackHitbox,
-        blockB: cRegularHits[i],
-        then: SpawnTrigger(
-          delay: 0.005 * i + 0.005,
-          target: lowerHealth1Karma,
-        ),
+        blockB: c,
+        then: do1HP1Karma,
       ),
     InstantCount(
       itemID: iMoving,
       targetCount: 1,
       compareType: InstantCountCompareType.equal,
       then: sgroup([
-        for (int j = 0; j < cBlueHits.length; j++)
+        for (final c in cBlueHits)
           InstantCollision(
             blockA: cPlayerAttackHitbox,
-            blockB: cBlueHits[j],
-            then: SpawnTrigger(
-              delay: 0.005 * (cRegularHits.length + j) + 0.005,
-              target: lowerHealth1Karma,
-            ),
+            blockB: c,
+            then: do1HP1Karma,
           ),
       ]),
     ),
   ]);
   SpawnTrigger(delay: 1.0 / 30, target: loop).groups.add(loop.group);
-  SpawnTrigger(onStart: true, target: loop);
-
+  SpawnTrigger(delay: 0.25 / 30, target: loop, onStart: true);
   SpawnTrigger(
     onStart: true,
     target: sgroup([
-      for (int j = 0; j < cBlueHits.length; j++)
+      for (final c in cRegularHits)
         Collision(
           blockA: cPlayerAttackHitbox,
-          blockB: cBlueHits[j],
-          then: SpawnTrigger(
-            delay: 0.005 * (cRegularHits.length + j) + 0.005,
-            target: lowerHealth1Karma,
+          blockB: c,
+          then: do5Karma,
+        ),
+      for (final c in cBlueHits)
+        Collision(
+          blockA: cPlayerAttackHitbox,
+          blockB: c,
+          then: InstantCount(
+            itemID: iMoving,
+            targetCount: 1,
+            compareType: InstantCountCompareType.equal,
+            then: do5Karma,
           ),
         ),
     ]),
   );
+
+  // SpawnTrigger(
+  //   onStart: true,
+  //   target: sgroup([
+  //     for (int j = 0; j < cBlueHits.length; j++)
+  //       Collision(
+  //         blockA: cPlayerAttackHitbox,
+  //         blockB: cBlueHits[j],
+  //         then: SpawnTrigger(
+  //           delay: 0.005 * (cRegularHits.length + j) + 0.005,
+  //           target: lowerHealth1Karma,
+  //         ),
+  //       ),
+  //   ]),
+  // );
 
   createPixelSpriteFromFile(
     File("/home/flafy/undertalestuff/blueheart.png"),

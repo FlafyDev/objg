@@ -41,7 +41,6 @@ void main() {
 
   proj = ObjGProject();
   proj.init();
-  print(hsvToGDHSV(201.9 / 360, 92.5 / 100, 100.0 / 100));
   initSwap();
   initHealthNumbers();
   initHealth();
@@ -81,7 +80,7 @@ void main() {
   );
 
   createPixelSpriteFromFile(
-    File("/home/flafy/undertalestuff/kr.png"),
+    File("/home/flafy/undertalestuff/platform1.png"),
     groups: [],
     centerGroups: [],
     x: 500.toDouble(),

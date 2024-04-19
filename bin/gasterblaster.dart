@@ -175,7 +175,7 @@ class Blaster {
     );
   }
 
-  RunAndClear shoot({
+  GDObject shoot({
     required int startX,
     required int startY,
     required int targetX,
@@ -189,52 +189,53 @@ class Blaster {
       lastY: (targetY + shootMoveY) - initialY,
       lastDegrees: targetRotation,
     );
-    return RunAndClear(
-      ogroup([
-        ToggleGroup(group: gAnimations[0], enable: true),
-        Move(
-          target: ReferenceGroup(gMove),
-          x: startX - initialX,
-          y: startY - initialY,
-          seconds: 0,
-        ),
-        Rotate(
-          degrees: targetRotation,
-          target: ReferenceGroup(gMove),
-          center: ReferenceGroup(gCenter),
-          seconds: 0.8,
-          easing: TriggerEasing.exponentialOut,
-        ),
-        Move(
-          target: ReferenceGroup(gMove),
-          x: targetX - startX,
-          y: targetY - startY,
-          seconds: 0.8,
-          easing: TriggerEasing.exponentialOut,
-        ),
-        SpawnTrigger(
-          delay: 20.0 / 30,
-          target: _runShootAnim,
-        ),
-        SpawnTrigger(
-          delay: 24.0 / 30,
-          target: _runLaserAnim,
-        ),
-        SpawnTrigger(
-          delay: 25.0 / 30,
-          target: sgroup([
-            Move(
-              target: ReferenceGroup(gMove),
-              x: shootMoveX,
-              y: shootMoveY,
-              seconds: 0.7,
-              easing: TriggerEasing.easeIn,
-            ),
-          ]),
-        ),
-      ]),
-      _clear(restoreRef),
-    );
+    return ogroup([
+      ToggleGroup(group: gAnimations[0], enable: true),
+      Move(
+        target: ReferenceGroup(gMove),
+        x: startX - initialX,
+        y: startY - initialY,
+        seconds: 0,
+      ),
+      Rotate(
+        degrees: targetRotation,
+        target: ReferenceGroup(gMove),
+        center: ReferenceGroup(gCenter),
+        seconds: 0.8,
+        easing: TriggerEasing.exponentialOut,
+      ),
+      Move(
+        target: ReferenceGroup(gMove),
+        x: targetX - startX,
+        y: targetY - startY,
+        seconds: 0.8,
+        easing: TriggerEasing.exponentialOut,
+      ),
+      SpawnTrigger(
+        delay: 20.0 / 30,
+        target: _runShootAnim,
+      ),
+      SpawnTrigger(
+        delay: 24.0 / 30,
+        target: _runLaserAnim,
+      ),
+      SpawnTrigger(
+        delay: 25.0 / 30,
+        target: sgroup([
+          Move(
+            target: ReferenceGroup(gMove),
+            x: shootMoveX,
+            y: shootMoveY,
+            seconds: 0.7,
+            easing: TriggerEasing.easeIn,
+          ),
+        ]),
+      ),
+      SpawnTrigger(
+        delay: 1.6,
+        target: _clear(restoreRef),
+      ),
+    ]);
   }
 
   late final GDObject _toggleOffAnimations = sgroup(

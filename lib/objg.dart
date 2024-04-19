@@ -16,5 +16,8 @@ export "package:objg/triggers/custom.dart";
 export "package:objg/triggers/rotate.dart";
 export "package:objg/triggers/scale.dart";
 export "package:objg/triggers/alpha_trigger.dart";
+export "package:objg/triggers/item_edit.dart";
+export "package:objg/triggers/item_comp.dart";
+export "package:objg/triggers/advanced_random.dart";
 export "package:objg/hsv_to_gdhsv.dart";
 export "package:objg/create_sprite.dart";

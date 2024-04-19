@@ -26,7 +26,7 @@ GDObject clearHealth(int health, bool kr) {
   return sgroup(objs);
 }
 
-GDObject setHealth(int health, bool kr) {
+GDObject setHealthNum(int health, bool kr) {
   health = health.clamp(0, 99);
 
   final objs = <GDObject>[];

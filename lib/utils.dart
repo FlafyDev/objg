@@ -30,8 +30,8 @@ String generateGDString(
   return str;
 }
 
-ReferenceGroup sgroup(List<GDObject> children) {
-  final group = getFreeGroup();
+ReferenceGroup sgroup(List<GDObject> children, {int? group}) {
+  final groupp = group ?? getFreeGroup();
 
   void addChild(GDObject child) {
     if (child is ReferenceGroup) {
@@ -40,21 +40,27 @@ ReferenceGroup sgroup(List<GDObject> children) {
           addChild(c);
         }
       } else {
-        SpawnTrigger(onStart: false, target: child).groups.add(group);
+        SpawnTrigger(onStart: false, target: child).groups.add(groupp);
       }
     } else {
-      child.groups.add(group);
+      child.groups.add(groupp);
     }
   }
 
   for (final child in children) {
     addChild(child);
   }
-  return ReferenceGroup(group, children: children);
+  return ReferenceGroup(groupp, children: children);
+}
+
+ReferenceGroup sgroupG(List<GDObject> Function(int) childrenFunc) {
+  final group = getFreeGroup();
+
+  return sgroup(childrenFunc(group), group: group);
 }
 
 // Ordered sgroup
-ReferenceGroup ogroup(List<GDObject> children) {
+ReferenceGroup ogroup(List<GDObject> children, {int? group}) {
   final newChildren = [...children];
 
   for (int i = 0; i < newChildren.length; i++) {
@@ -64,7 +70,13 @@ ReferenceGroup ogroup(List<GDObject> children) {
     newChildren[i].x = i;
   }
 
-  return sgroup(newChildren);
+  return sgroup(newChildren, group: group);
+}
+
+ReferenceGroup ogroupG(List<GDObject> Function(int) childrenFunc) {
+  final group = getFreeGroup();
+
+  return ogroup(childrenFunc(group), group: group);
 }
 
 class ReferenceGroup extends GDObject {

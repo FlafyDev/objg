@@ -7,7 +7,7 @@ final healthBarGroupList = <int>[];
 final karmaBarGroupList = <int>[];
 final gKarmaBars = getFreeGroup();
 final iHealth = getFreeItem(92);
-final iKarma = getFreeItem(1);
+final iKarma = getFreeItem(0);
 final gCurrentHealthBar = getFreeGroup();
 final gPurpleMaxHPText = 18;
 
@@ -49,13 +49,13 @@ final GDObject _showHealthBar = (() {
             itemID: iKarma,
             targetCount: 0,
             compareType: InstantCountCompareType.equal,
-            then: setHealth(i + 1, false),
+            then: setHealthNum(i + 1, false),
           ),
           InstantCount(
             itemID: iKarma,
             targetCount: 0,
             compareType: InstantCountCompareType.larger,
-            then: setHealth(i + 1, true),
+            then: setHealthNum(i + 1, true),
           ),
           Move(
             x: 0,
@@ -217,21 +217,45 @@ final limitKarma = (() {
   return sgroup(objs);
 })();
 
-GDObject _lowerHealthXKarma(int karma) => ogroup([
-      _hideHealthBar,
-      // Pickup(
-      //   itemID: iHealth,
-      //   type: PickupType.addition,
-      //   count: -1,
-      // ),
-      Pickup(
-        itemID: iKarma,
-        type: PickupType.addition,
-        count: karma,
-      ),
-      limitKarma,
-      _showHealthBar,
-    ]);
+final iChangingHealth = getFreeItem();
+
+// GDObject _lowerHealthXKarma(int karma) => ogroupG((g) => [
+//       InstantCount(
+//         itemID: iChangingHealth,
+//         targetCount: 1,
+//         compareType: InstantCountCompareType.equal,
+//         then: SpawnTrigger(delay: 0.006, target: ReferenceGroup(g)),
+//       ),
+//       Pickup(
+//         itemID: iChangingHealth,
+//         type: PickupType.override,
+//         count: 1,
+//       ),
+//       _hideHealthBar,
+//       // Pickup(
+//       //   itemID: iHealth,
+//       //   type: PickupType.addition,
+//       //   count: -1,
+//       // ),
+//       Pickup(
+//         itemID: iKarma,
+//         type: PickupType.addition,
+//         count: karma,
+//       ),
+//       limitKarma,
+//       _showHealthBar,
+//       SpawnTrigger(
+//         delay: 0.005,
+//         target: Pickup(
+//           itemID: iChangingHealth,
+//           type: PickupType.override,
+//           count: 0,
+//         ),
+//       ),
+//     ]);
+
+final iTo1Karma = getFreeItem();
+final iTo1Health = getFreeItem();
 
 void initHealth() {
   for (int i = 0; i < 92; i++) {
@@ -292,28 +316,64 @@ void initHealth() {
     target: _showHealthBar,
   );
 
-  final lowerKarma = ogroup([
-    _hideHealthBar,
-    InstantCount(
-      itemID: iKarma,
-      targetCount: 0,
-      compareType: InstantCountCompareType.larger,
-      then: sgroup([
-        Pickup(
+  final lowerKarma = ogroupG((g) => [
+        // InstantCount(
+        //   itemID: iKarma,
+        //   targetCount: 0,
+        //   compareType: InstantCountCompareType.larger,
+        //   then: sgroup([
+        //     Pickup(
+        //       itemID: iKarma,
+        //       type: PickupType.addition,
+        //       count: -1,
+        //     ),
+        //     Pickup(
+        //       itemID: iHealth,
+        //       type: PickupType.addition,
+        //       count: -1,
+        //     ),
+        //   ]),
+        // ),
+        // InstantCount(
+        //   itemID: iChangingHealth,
+        //   targetCount: 1,
+        //   compareType: InstantCountCompareType.equal,
+        //   then: SpawnTrigger(delay: 0.006, target: ReferenceGroup(g)),
+        // ),
+        // Pickup(
+        //   itemID: iChangingHealth,
+        //   type: PickupType.override,
+        //   count: 1,
+        // ),
+        _hideHealthBar,
+        InstantCount(
           itemID: iKarma,
-          type: PickupType.addition,
-          count: -1,
+          targetCount: 0,
+          compareType: InstantCountCompareType.larger,
+          then: sgroup([
+            Pickup(
+              itemID: iKarma,
+              type: PickupType.addition,
+              count: -1,
+            ),
+            Pickup(
+              itemID: iHealth,
+              type: PickupType.addition,
+              count: -1,
+            ),
+          ]),
         ),
-        Pickup(
-          itemID: iHealth,
-          type: PickupType.addition,
-          count: -1,
-        ),
-      ]),
-    ),
-    limitKarma,
-    _showHealthBar,
-  ]);
+        // limitKarma,
+        _showHealthBar,
+        // SpawnTrigger(
+        //   delay: 0.005,
+        //   target: Pickup(
+        //     itemID: iChangingHealth,
+        //     type: PickupType.override,
+        //     count: 0,
+        //   ),
+        // ),
+      ]);
   // KARMA == 40 --> 1 frame
   // 30 =< KARMA =< 39 --> 2 frame
   // 20 =< KARMA =< 29 --> 5 frame
@@ -430,6 +490,45 @@ void initHealth() {
   SpawnTrigger(delay: 1.0 / 30, target: loop).groups.add(loop.group);
   SpawnTrigger(onStart: true, target: loop);
 
+  final loop2 = ogroup([
+    _hideHealthBar,
+    // Pickup(
+    //   itemID: iHealth,
+    //   type: PickupType.addition,
+    //   count: -1,
+    // ),
+    ItemEdit(
+      itemID1: iHealth,
+      itemID2: iTo1Health,
+      modifier: ItemEditModifier.add,
+      itemIDResult: iHealth,
+    ),
+    Pickup(
+      itemID: iTo1Health,
+      type: PickupType.override,
+      count: 0,
+    ),
+    ItemEdit(
+      itemID1: iKarma,
+      itemID2: iTo1Karma,
+      modifier: ItemEditModifier.add,
+      itemIDResult: iKarma,
+    ),
+    Pickup(
+      itemID: iTo1Karma,
+      type: PickupType.override,
+      count: 0,
+    ),
+    limitKarma,
+    _showHealthBar,
+    // SpawnTrigger(
+    //   delay: 0.01,
+    //   target: _showHealthBar,
+    // ),
+  ]);
+  SpawnTrigger(delay: 1.0 / 30, target: loop2).groups.add(loop2.group);
+  SpawnTrigger(onStart: true, delay: 0.5 / 30, target: loop2);
+
   // final agroup = getFreeGroup();
 
   // SpawnTrigger(
@@ -509,13 +608,32 @@ void initHealth() {
   // );
 }
 
-// Bone vertical loop: 5
-final lowerHealth5Karma = _lowerHealthXKarma(5);
-// Gaster Blaster: 10
-final lowerHealth10Karma = _lowerHealthXKarma(10);
-// Single menu bone (top left): 2
-final lowerHealth2Karma = _lowerHealthXKarma(2);
-// Four menu bones (bottom): 1
-final lowerHealth1Karma = _lowerHealthXKarma(1);
-// Other: 6
-final lowerHealth6Karma = _lowerHealthXKarma(6);
+final do1HP1Karma = sgroup([
+  Pickup(
+    itemID: iTo1Karma,
+    type: PickupType.addition,
+    count: 1,
+  ),
+  Pickup(
+    itemID: iTo1Health,
+    type: PickupType.addition,
+    count: -1,
+  ),
+]);
+
+final do5Karma = Pickup(
+  itemID: iTo1Karma,
+  type: PickupType.addition,
+  count: 5,
+);
+
+// // Bone vertical loop: 5
+// final lowerHealth5Karma = _lowerHealthXKarma(5);
+// // Gaster Blaster: 10
+// final lowerHealth10Karma = _lowerHealthXKarma(10);
+// // Single menu bone (top left): 2
+// final lowerHealth2Karma = _lowerHealthXKarma(2);
+// // Four menu bones (bottom): 1
+// final lowerHealth1Karma = _lowerHealthXKarma(1);
+// // Other: 6
+// final lowerHealth6Karma = _lowerHealthXKarma(6);

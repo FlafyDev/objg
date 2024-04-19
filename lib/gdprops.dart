@@ -34,6 +34,8 @@ enum GDProps {
   scaleTriggerCenterGroup(71),
   scaleTriggerTimeSeconds(10),
 
+  advancedRandomList(152),
+
   moveTriggerMoveX(28),
   moveTriggerMoveY(29),
   moveTriggerTargetGroup(51),
@@ -78,6 +80,29 @@ enum GDProps {
   instantCountTriggerTargetCount(77),
   instantCountTriggerActivateGroup(56),
   instantCountTriggerCompareType(88),
+
+  itemEditItemID1(80),
+  itemEditItemID2(95),
+  itemEditTargetItemID(51),
+  itemEditType1(476),
+  itemEditType2(477),
+  itemEditTargetType(478),
+  itemEditMod(479),
+  itemEditAssignOp(480),
+  itemEditOp1(481),
+  itemEditOp2(482),
+
+  itemCompItemID1(80),
+  itemCompItemID2(95),
+  itemCompType1(476),
+  itemCompType2(477),
+  itemCompTrueID(51),
+  itemCompFalseID(71),
+  itemCompMod1(479),
+  itemCompMod2(483),
+  itemCompOp1(480),
+  itemCompOp2(481),
+  itemCompCompareOp(482),
 
   eventTriggerGroupID(51),
   eventTriggerExtraID2(525),
